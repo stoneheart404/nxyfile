@@ -1,0 +1,60 @@
+{
+  "name": "easyapp",
+  "version": "1.0.0",
+  "description": "A local project dashboard that detects and hosts projects in C:\\Projects.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "web": "node start-web.js",
+    "build": "electron-builder",
+    "build:portable": "electron-builder --win portable",
+    "build:installer": "electron-builder --win nsis",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "keywords": ["electron", "desktop", "web", "easyapp"],
+  "author": "You",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^42.5.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.yourname.easyapp",
+    "productName": "EasyApp",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "hosting.js",
+      "index.html",
+      "renderer.js",
+      "styles.css"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        },
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "EasyApp-${version}-Portable.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "EasyApp"
+    }
+  }
+}

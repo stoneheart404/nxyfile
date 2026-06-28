@@ -1,5 +1,8 @@
 # Nyxfile
 
+[![Download macOS](https://img.shields.io/badge/download-macOS%20.dmg-000?style=flat&logo=apple)](https://github.com/stoneheart404/nxyfile/releases/latest)
+[![Download Windows](https://img.shields.io/badge/download-Windows%20.exe-000?style=flat&logo=windows)](https://github.com/stoneheart404/nxyfile/releases/latest)
+
 AI-powered desktop file manager. Chat with an AI that can scan, organize, move, delete, and manage your files across your entire device.
 
 ## Quick Start
@@ -106,11 +109,21 @@ Click any file in the left panel to preview it on the right:
 ```bash
 npm start           # development
 npm run build:win   # Windows .exe installer
-npm run build:mac   # macOS .dmg
+npm run build:mac   # macOS .dmg (requires Mac)
 npm run build:all   # both platforms
 ```
 
 Outputs go to `dist/`.
+
+### macOS DMG via GitHub Actions
+
+A workflow automatically builds the macOS DMG on push to `main`. To get it:
+
+1. Go to [Actions](https://github.com/stoneheart404/nxyfile/actions)
+2. Click the latest workflow run
+3. Download `nyxfile-macos-dmg` from the Artifacts section
+
+Or trigger manually: Actions tab > "Build macOS DMG" > Run workflow.
 
 ## Security
 

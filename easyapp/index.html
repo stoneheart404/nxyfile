@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyApp</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="header-top">
+        <h1>EasyApp</h1>
+        <span id="mode-badge" class="badge">web</span>
+      </div>
+      <p class="subtitle">host projects in <code>C:\Projects</code></p>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <input type="text" id="search" placeholder="filter projects..." />
+        <button id="refresh-btn" class="btn small">refresh</button>
+      </div>
+
+      <div id="projects-list" class="projects-list">
+        <p class="loading">loading projects...</p>
+      </div>
+    </main>
+
+    <footer>
+      <p><code>C:\Projects</code> — local hosting dashboard</p>
+    </footer>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
