@@ -25,7 +25,8 @@
       "icon": "icons/icon.png",
       "category": "public.app-category.utilities",
       "hardenedRuntime": true,
-      "gatekeeperAssess": false
+      "gatekeeperAssess": false,
+      "artifactName": "Nyxfile-${version}-${arch}.${ext}"
     },
     "files": [
       "main.js",

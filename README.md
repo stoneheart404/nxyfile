@@ -119,11 +119,20 @@ Outputs go to `dist/`.
 
 A workflow automatically builds the macOS DMG on push to `main`. To get it:
 
-1. Go to [Actions](https://github.com/stoneheart404/nxyfile/actions)
-2. Click the latest workflow run
-3. Download `nyxfile-macos-dmg` from the Artifacts section
+1. Go to [Releases](https://github.com/stoneheart404/nxyfile/releases)
+2. Download the latest `.dmg` for your architecture (`arm64` for Apple Silicon, `x64` for Intel)
+3. Open the DMG and drag Nyxfile to Applications
 
-Or trigger manually: Actions tab > "Build macOS DMG" > Run workflow.
+**If macOS shows "damaged and can't be opened":**
+
+This happens because the app isn't code-signed (requires Apple Developer account). To bypass:
+
+```bash
+# After installing, run this in Terminal:
+xattr -cr /Applications/Nyxfile.app
+```
+
+Then right-click the app in Finder and select **Open** -- macOS will then let you run it.
 
 ## Security
 
