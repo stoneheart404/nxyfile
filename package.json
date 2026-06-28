@@ -12,6 +12,7 @@
   "build": {
     "appId": "com.nyxfile.app",
     "productName": "Nyxfile",
+    "publish": null,
     "directories": {
       "output": "dist"
     },
