@@ -1,5 +1,8 @@
 # Nyxfile
 
+[![Download macOS](https://img.shields.io/badge/download-macOS%20.dmg-000?style=flat&logo=apple)](https://github.com/stoneheart404/nxyfile/releases/latest)
+[![Download Windows](https://img.shields.io/badge/download-Windows%20.exe-000?style=flat&logo=windows)](https://github.com/stoneheart404/nxyfile/releases/latest)
+
 AI-powered desktop file manager. Chat with an AI that can scan, organize, move, delete, and manage your files across your entire device.
 
 ## Quick Start
