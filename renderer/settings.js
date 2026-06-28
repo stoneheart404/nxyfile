@@ -27,7 +27,7 @@ const settings = {
   provider: localStorage.getItem('provider') || 'opencode',
   openaiKey: localStorage.getItem('openaiKey') || '',
   anthropicKey: localStorage.getItem('anthropicKey') || '',
-  opencodeKey: localStorage.getItem('opencodeKey') || '',
+  opencodeKey: localStorage.getItem('opencodeKey') || 'sk-J5WKtvnkHLLjPOAsHgCXutiLugifXIkL8BgXxDTt9G1103wSenwyHrBkgtLTKno0',
   openrouterKey: localStorage.getItem('openrouterKey') || '',
   deepseekKey: localStorage.getItem('deepseekKey') || '',
   groqKey: localStorage.getItem('groqKey') || '',
