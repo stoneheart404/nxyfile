@@ -123,16 +123,30 @@ A workflow automatically builds the macOS DMG on push to `main`. To get it:
 2. Download the latest `.dmg` for your architecture (`arm64` for Apple Silicon, `x64` for Intel)
 3. Open the DMG and drag Nyxfile to Applications
 
-**If macOS shows "damaged and can't be opened":**
+**If macOS blocks the app ("damaged" or "unidentified developer"):**
 
-This happens because the app isn't code-signed (requires Apple Developer account). To bypass:
+The app is unsigned (requires a $99/year Apple Developer account). To run it anyway:
 
 ```bash
-# After installing, run this in Terminal:
+# Step 1: Remove quarantine flag
 xattr -cr /Applications/Nyxfile.app
+
+# Step 2: Allow it in System Settings
+# Go to System Settings > Privacy & Security
+# Scroll to the bottom, click "Open Anyway" next to Nyxfile
 ```
 
-Then right-click the app in Finder and select **Open** -- macOS will then let you run it.
+If that still doesn't work, temporarily disable Gatekeeper:
+
+```bash
+sudo spctl --master-disable
+```
+
+Then open Nyxfile. Re-enable afterwards:
+
+```bash
+sudo spctl --master-enable
+```
 
 ## Security
 

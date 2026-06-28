@@ -24,8 +24,7 @@
       "target": ["dmg", "zip"],
       "icon": "icons/icon.png",
       "category": "public.app-category.utilities",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
+      "hardenedRuntime": false,
       "artifactName": "Nyxfile-${version}-${arch}.${ext}"
     },
     "files": [
