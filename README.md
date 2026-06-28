@@ -1,197 +1,145 @@
-# Files
+# Nyxfile
 
-AI-powered desktop file manager. Chat with an AI to organize, clean, and manage your files.
+AI-powered desktop file manager. Chat with an AI that can scan, organize, move, delete, and manage your files across your entire device.
 
-## Design
+## Quick Start
 
-Minimal, dark interface inspired by modern design systems. All icons are lightweight SVGs with no emojis. Smooth animations throughout.
-
-```
-+------------------+-----------------------------+------------------+
-| [settings] [_][□][×]                                             |
-+------------------+-----------------------------+------------------+
-| FILES            | CHAT           [Cloud]      | PREVIEW          |
-| [Open folder]    |                             |                  |
-| /Users/...       | Welcome to Files.           | Name    notes.md |
-|                  |                             | Size    12KB     |
-| > folder-a/      | I can help manage your      | Type    .md      |
-| > folder-b/      | files through conversation. | Mod     ...      |
-|   image.png      |                             |                  |
-|   notes.md       | > "organize by type"        | # Hello World    |
-|   data.csv       |                             |                  |
-|                  | [Execute] [Ignore]          | [Open] [Delete]  |
-|                  |                             |                  |
-|                  | +-------------------------+ |                  |
-|                  | | Type a command... [->]  | |                  |
-+------------------+-----------------------------+------------------+
+```bash
+npm install
+npm start
 ```
 
-## Stack
+## Interface
 
-| Layer | Technology |
-|-------|-----------|
-| Shell | Electron 33 |
-| UI | Vanilla HTML/CSS/JS |
-| Icons | Inline SVG (Feather-style) |
-| AI | OpenAI API + Ollama local |
-| File ops | Node.js fs, path, crypto |
-| Packaging | electron-builder (Windows .exe, macOS .dmg) |
+```
++------------------+------------------------------+------------------+
+| Nyxfile                                         [gear] [min] [max] [x] |
++------------------+------------------------------+------------------+
+| FILES      [pc][^][folder]  CHAT         [Go]   PREVIEW           |
+| C:\                   |                          |                 |
+|                        | Nyxfile is ready.        | Name  notes.txt |
+| [DIR] Users/           |                          | Size  2.3 KB    |
+| [DIR] Windows/         | Full device access.      | Type  .txt      |
+| [DIR] Projects/        | Chat to manage files.    | Mod   ...       |
+| [IMG] photo_png  1.2M  |                          |                 |
+| [DOC] notes.txt   2K   | > "organize by type"     | Hello world     |
+| [CODE] app.js    5K    |                          |                 |
+|                        | [Execute] [Ignore]       | [Open] [Delete] |
+|                        +--------------------------+                 |
+|                        | Type a command...  [->]  |                 |
++------------------+------------------------------+------------------+
+```
+
+## How to use
+
+### 1. Pick a folder
+
+Click one of the three navigation buttons in the top-left panel:
+
+| Button | Action |
+|--------|--------|
+| Monitor icon | Browse all drives on your PC |
+| Up arrow | Go to parent directory |
+| Folder icon | Open a native folder picker |
+
+The file tree shows everything in the current directory. Click a folder to navigate into it. Click a file to preview it in the right panel.
+
+### 2. Choose an AI provider
+
+Open Settings with `Ctrl+,` (or the gear icon in the titlebar). Pick a provider:
+
+| Provider | What you need |
+|----------|--------------|
+| OpenAI | API key from platform.openai.com |
+| Anthropic (Claude) | API key from console.anthropic.com |
+| OpenCode Go | API key from opencode.ai/auth ($10/mo subscription) |
+| Ollama | Nothing - runs locally. Install Ollama first |
+| OpenRouter | API key from openrouter.ai |
+| DeepSeek | API key from platform.deepseek.com |
+| Groq | API key from console.groq.com |
+| Custom | Any OpenAI-compatible endpoint + URL |
+
+### 3. Chat with the AI
+
+Type what you want in the center panel. The AI sees your current directory contents and can:
+
+- Scan any folder to see what's inside
+- Read text and code files for inspection
+- Search for files by name across directories
+- Find duplicate files
+- Organize files by type, date, or custom rules
+- Move, copy, rename, or delete files (to trash)
+- Create folders
+- Open files in system explorer
+
+**Examples:**
+```
+"Organize this folder by file type"
+"Find duplicate images in Downloads"
+"Show me files larger than 100MB"
+"Sort all files into year/month folders"
+"Search for all .pdf files"
+```
+
+### 4. Review and execute
+
+The AI streams its thinking in real-time. You see its response appear word by word. When it proposes actions:
+
+- A "Thinking" block shows the AI's reasoning (click to expand/collapse)
+- Action tags appear below the message (scan, move, delete, etc.)
+- Click **Execute** to review and run the actions
+- Click **Ignore** to dismiss
+
+Scan and read actions run automatically so the AI always has fresh data.
+
+### 5. Preview files
+
+Click any file in the left panel to preview it on the right:
+
+- Text and code files show their contents
+- Images display as thumbnails
+- Click **Open** to reveal in Explorer
+- Click **Delete** to move to trash
+
+## Build
+
+```bash
+npm start           # development
+npm run build:win   # Windows .exe installer
+npm run build:mac   # macOS .dmg
+npm run build:all   # both platforms
+```
+
+Outputs go to `dist/`.
+
+## Security
+
+- `contextIsolation` enabled - renderer has no direct Node.js access
+- All file operations go through typed IPC channels
+- API keys stored in localStorage, never written to disk
+- Delete always moves to system trash, not permanent removal
+- Confirmation required for destructive actions (toggleable in Settings)
 
 ## Architecture
 
 ```
-file-organizer-app/
-│
-├── main.js              # Electron main process
-│   ├── Window management (frameless, draggable titlebar)
-│   ├── IPC handlers for all file system operations
-│   ├── AI bridge (delegates to ai/* modules)
-│   └── Security: contextIsolation, no nodeIntegration
-│
-├── preload.js           # Secure context bridge
-│   └── Exposes api.* methods to renderer via contextBridge
-│
-├── ai/
-│   ├── openai.js        # OpenAI chat completions (gpt-4o-mini)
-│   │   └── System prompt defines capabilities + JSON action format
-│   └── ollama.js        # Ollama local API (http://localhost:11434)
-│       ├── Chat with local models
-│       └── List available models
-│
-├── renderer/
-│   ├── index.html       # 3-panel layout + SVG icon library + modals
-│   ├── style.css        # Dark theme, CSS variables, animations
-│   ├── settings.js      # Settings state, modal, localStorage persistence
-│   ├── files.js         # File tree rendering, directory scanning
-│   ├── preview.js       # File preview (text, images, metadata)
-│   └── chat.js          # AI chat, action parsing, confirmation flow
-│
-└── package.json         # Dependencies + electron-builder config
+nyxfile/
+  main.js           Electron main process, IPC handlers, window management
+  preload.js        Secure context bridge (contextBridge)
+  ai/
+    shared.js       System prompt (shared by all providers)
+    openai.js       OpenAI chat + streaming
+    anthropic.js    Claude chat + streaming
+    ollama.js       Local Ollama chat + streaming
+    custom.js       OpenAI-compatible endpoint chat + streaming
+  renderer/
+    index.html      3-panel layout, SVG icon library, modals
+    style.css       Dark theme, CSS variables, animations
+    settings.js     Multi-provider settings, localStorage persistence
+    files.js        File tree, directory navigation, drive browser
+    preview.js      File preview (images, text, metadata)
+    chat.js         AI chat, streaming display, action execution
 ```
-
-## How it works
-
-### 1. File Browser (Left Panel)
-- Click the folder icon to open a native directory picker
-- Scans the selected directory via `fs:scan` IPC
-- Renders files sorted: directories first, then alphabetical
-- Each entry shows an SVG icon based on file type
-- Click a file to preview it; click a directory to navigate in
-- Path bar shows the current directory
-
-### 2. AI Chat (Center Panel)
-The chat is the primary interaction method. Instead of buttons for every operation, you describe what you want and the AI executes it.
-
-**Flow:**
-1. User types a command (e.g., "organize downloads by file type")
-2. The current directory listing is injected as system context
-3. The AI (OpenAI or Ollama) responds with:
-   - A human-readable message explaining the plan
-   - A JSON array of actions with type, path, description
-4. Actions are displayed as tags below the message
-5. User clicks "Execute" to see a confirmation dialog
-6. After confirmation, actions run sequentially
-7. Results are reported back in chat
-
-**Action types the AI can request:**
-`scan`, `read`, `delete`, `move`, `copy`, `rename`, `mkdir`, `findDuplicates`, `openExplorer`
-
-**Safety:** The AI is instructed to always explain before acting. Confirmation is required for destructive operations. Deleted files go to the system trash.
-
-### 3. File Preview (Right Panel)
-- Shows file metadata (name, size, type, modified date)
-- Renders image previews for common image formats
-- Renders text content for text/code files (truncated at 10KB)
-- Binary files show a placeholder
-- Action buttons: Open in Explorer, Delete
-
-### 4. Settings (Ctrl+, or gear icon)
-- **AI Mode:** Toggle between Cloud (OpenAI) and Local (Ollama)
-- **OpenAI:** Enter your API key (stored in localStorage)
-- **Ollama:** Select from available local models
-- **Safety:** Toggle confirmation before destructive actions
-
-### AI Prompt Engineering
-
-The system prompt sent to the AI defines its capabilities and enforces rules:
-
-```
-You are FileOrganizer AI...
-Capabilities: scan, read, delete, move, copy, rename, mkdir, findDuplicates
-Rules:
-  1. Always explain what you will do before doing it
-  2. Ask for confirmation before destructive actions
-  3. Return response in JSON format with message + actions array
-  4. Never delete without explicit user confirmation
-  5. Organization defaults: Images/, Documents/, Videos/, Audio/, Archives/, Code/, Others/
-```
-
-### File Operations (main.js)
-
-All file system access happens in the main process through IPC handlers:
-
-| IPC Channel | Function | Description |
-|------------|----------|-------------|
-| `fs:scan` | `fs.readdir` + `fs.stat` | List directory contents |
-| `fs:read` | `fs.readFile` | Read file content for preview |
-| `fs:delete` | `shell.trashItem` | Move to system trash |
-| `fs:move` | `fs.rename` | Move file to new location |
-| `fs:copy` | `fs.copyFile` | Copy file |
-| `fs:mkdir` | `fs.mkdir` | Create directory |
-| `fs:rename` | `fs.rename` | Rename file |
-| `fs:hash` | `crypto.createHash` | SHA-256 hash for duplicate detection |
-| `fs:findDuplicates` | Walk + hash compare | Find duplicate files |
-| `fs:openExplorer` | `shell.showItemInFolder` | Open in native file manager |
-
-## Running
-
-```bash
-# Install dependencies
-npm install
-
-# Run in development
-npm start
-
-# Build for Windows
-npm run build:win
-
-# Build for macOS
-npm run build:mac
-
-# Build both
-npm run build:all
-```
-
-## Cross-platform
-
-The same codebase builds for both Windows and macOS:
-
-- **Windows:** NSIS installer (`dist/file-organizer-setup.exe`)
-- **macOS:** DMG image (`dist/file-organizer.dmg`)
-- Platform-specific behavior: `process.platform === 'darwin'` for Mac-only quirks
-- `shell.trashItem` works on both platforms (Electron 30+)
-- Native file dialogs adapt to each OS
-
-## Customization
-
-### AI Backend
-- **OpenAI:** Set `OPENAI_API_KEY` or enter in Settings. Model: `gpt-4o-mini` (configurable in `ai/openai.js`)
-- **Ollama:** Install [Ollama](https://ollama.com), run `ollama pull llama3.2`, then select it in Settings
-
-### Design Tokens
-All colors, radii, and transitions are CSS custom properties in `:root` inside `style.css`. Change `--accent`, `--bg-*`, `--text-*` to rebrand.
-
-### Icons
-SVG icons are defined in `index.html` as `<defs>` inside a hidden `<svg>` element. Reference them with `<use href="#icon-name"/>`. Based on Feather icons (MIT licensed). Add new icons by appending to the `<defs>` block.
-
-## Security
-
-- `contextIsolation: true` -- renderer cannot access Node.js directly
-- `nodeIntegration: false` -- no `require()` in renderer
-- All file operations go through typed IPC channels in `preload.js`
-- CSP header restricts script sources to `'self'`
-- API keys stored in `localStorage` (not written to disk as plaintext)
-- No secrets in the codebase
 
 ## License
 
