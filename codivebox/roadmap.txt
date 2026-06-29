@@ -1,0 +1,300 @@
+=======================================================
+  CODIVEBOX — APP ROADMAP & IMPROVEMENT PLAN
+=======================================================
+
+  Version: 2.0.0
+  Stack:   Electron + CodeMirror 5 + Pyodide + Vanilla JS
+  File:    roadmap.txt  (keep this updated as you build)
+
+-------------------------------------------------------
+  WHAT IS CODIVEBOX
+-------------------------------------------------------
+
+CodiveBox is a desktop IDE built on Electron. It looks and
+feels like VS Code but is fully self-contained. The core
+pillars are:
+
+  1. Code Editor     — CodeMirror 5 with syntax highlighting,
+                       folding, autocomplete, split view.
+  2. File System     — Virtual FS stored in localStorage,
+                       with real folder open via Electron.
+  3. Code Runner     — Python via Pyodide (in-browser WASM),
+                       HTML preview via Blob URL.
+  4. AI Chat         — Right-side panel, connects to any
+                       OpenAI-compatible API (DeepSeek,
+                       GPT-4o, Claude, Gemini).
+  5. Shell/UI        — Custom titlebar, activity bar, sidebar
+                       views (Explorer, Search, SCM, Debug,
+                       Extensions, Settings), output panel,
+                       status bar, command palette.
+
+-------------------------------------------------------
+  CURRENT PROJECT STRUCTURE
+-------------------------------------------------------
+
+  codivebox/
+  ├── main.js          Electron main process
+  │                    Window creation, IPC, menus,
+  │                    folder open + file walk
+  │
+  ├── preload.js       Context bridge (IPC to renderer)
+  │
+  ├── index.html       Full app UI / layout
+  │                    All panels, sidebar views,
+  │                    activity bar, status bar
+  │
+  ├── app.js           Renderer logic (everything frontend)
+  │                    Editor init, file system, chat,
+  │                    run code, command palette, resize,
+  │                    sidebar views, output panel
+  │
+  ├── style.css        All visual styles
+  │                    Dark theme, layout variables,
+  │                    components, responsive tweaks
+  │
+  ├── config.json      Default API config (loaded on start)
+  │
+  ├── package.json     Electron app metadata + scripts
+  ├── lock.txt         Update & upgrade changelog
+  └── roadmap.txt      This file
+
+-------------------------------------------------------
+  KNOWN ISSUES (fix these first)
+-------------------------------------------------------
+
+  [ ] API key is stored in plain config.json — needs
+      Electron safeStorage or keytar encryption
+  [ ] Config is loaded from file but settings panel
+      saves to localStorage only — they can desync
+  [ ] "Open Folder" loads real files but doesn't sync
+      back saves to disk (edits are lost on reload)
+  [ ] SCM panel is purely decorative (hardcoded M files)
+  [ ] Debug / Extensions / Search sidebar views are stubs
+  [ ] Split editor copies active file content but the two
+      panes don't stay in sync
+  [ ] Pyodide loads fresh every cold start — no caching
+  [ ] No error boundaries — a bad API key gives a raw
+      fetch error in chat, not a friendly message
+  [ ] Command palette arrow-key navigation is broken
+      (only mouse click works)
+  [ ] btnFix in toolbar has a malformed SVG path
+
+-------------------------------------------------------
+  IMPROVEMENT PLAN — ORDERED BY PRIORITY
+-------------------------------------------------------
+
+Each phase is self-contained. Complete one before the
+next. Check the box when done and log the change in
+lock.txt.
+
+═══════════════════════════════════════════════════════
+  PHASE 1 — Stability & Core Fixes  (do this first)
+═══════════════════════════════════════════════════════
+
+  Step 1.1  Config sync
+  ─────────────────────
+  [x] On app start, read config.json via IPC and
+      populate the settings panel fields (apiUrl,
+      apiKey, model, temperature, etc.)
+  [x] saveConfigBtn should write back to config.json
+      via IPC — not just localStorage
+  [x] Add a "config-loaded" IPC reply so renderer
+      knows when values are ready
+
+  Step 1.2  Real file save on disk
+  ─────────────────────────────────
+  [x] Add IPC handler "save-file" in main.js that
+      writes content back to the real path on disk
+  [x] In app.js, when a real-disk file is active
+      (has a path property), call save-file IPC
+      instead of localStorage
+  [x] Show a "saved to disk" vs "saved to memory"
+      indicator in the status bar
+
+  Step 1.3  Command palette keyboard nav
+  ───────────────────────────────────────
+  [x] On ArrowDown / ArrowUp keypress in palette
+      input, move the .active class through items
+  [x] Scroll active item into view
+  [x] Fix Enter key to always fire the active item
+
+  Step 1.4  Fix broken toolbar SVG (btnFix)
+  ──────────────────────────────────────────
+  [x] Toolbar removed in previous session
+  [x] Actions tab provides explain/fix/refactor
+      functionality via AI chat
+
+  Step 1.5  Error handling improvements
+  ──────────────────────────────────────
+  [x] Wrap fetch in sendMsg with specific error
+      messages: 401 = bad key, 429 = rate limit,
+      5xx = server error, 403 = access denied
+  [x] Show error in chat bubble, not just console
+  [x] Add a connection test button in Settings
+
+═══════════════════════════════════════════════════════
+  PHASE 2 — Editor Enhancements
+═══════════════════════════════════════════════════════
+
+  Step 2.1  More language support
+  ─────────────────────────────────
+  [x] Add TypeScript, SQL, Bash, YAML, XML modes
+      from CodeMirror CDN
+  [x] Update language map in getLang() and in the
+      virtual FS extension map
+
+  Step 2.2  Better autocomplete
+  ──────────────────────────────
+  [x] Replace anyword-hint with per-language hints
+      (python-hint for .py, javascript-hint for .js)
+  [x] Trigger autocomplete automatically after 2+
+      chars (not just Ctrl+Space)
+
+  Step 2.3  Minimap / scrollbar
+  ──────────────────────────────
+  [ ] Add a simple line-count minimap on the right
+      edge of the editor using a canvas overlay
+      (optional, low priority)
+
+  Step 2.4  Sync split editor
+  ────────────────────────────
+  [x] When split pane is open, make both panes edit
+      the same buffer (mirror mode) OR clearly
+      label them as independent files
+  [x] Allow opening a different file in the split pane
+
+  Step 2.5  Bracket / indent guides
+  ──────────────────────────────────
+  [x] Enable CodeMirror indent guides addon
+  [x] Add visible indent lines for Python files
+
+═══════════════════════════════════════════════════════
+  PHASE 3 — File System Upgrade
+═══════════════════════════════════════════════════════
+
+  Step 3.1  Persist real workspace across reloads
+  ─────────────────────────────────────────────────
+  [ ] Store the last opened folder path in
+      localStorage / config
+  [ ] On startup, if a last folder exists, auto-
+      reload its files via IPC
+  [ ] Watch for external file changes (fs.watch)
+      and refresh the tree
+
+  Step 3.2  Folder tree with nesting
+  ────────────────────────────────────
+  [ ] Replace flat file list with a real tree that
+      shows subdirectories as collapsible nodes
+  [ ] Add folder context menu (new file, new folder,
+      rename, delete)
+
+  Step 3.3  Drag-and-drop files into editor
+  ──────────────────────────────────────────
+  [ ] Allow dragging a file from OS into the editor
+      area to open it
+
+═══════════════════════════════════════════════════════
+  PHASE 4 — AI Chat Improvements
+═══════════════════════════════════════════════════════
+
+  Step 4.1  Context-aware prompts
+  ─────────────────────────────────
+  [ ] btnExplain → sends selected text (or full file)
+      to chat with "Explain this code:" prefix
+  [ ] btnFix → sends selected text with "Fix this:"
+  [ ] Add a "Refactor" toolbar button
+
+  Step 4.2  Chat history persistence
+  ────────────────────────────────────
+  [ ] Save messages array to localStorage per
+      session key
+  [ ] Add a "History" dropdown to reload past chats
+
+  Step 4.3  Streaming responses
+  ──────────────────────────────
+  [ ] Switch sendMsg to use fetch with ReadableStream
+      to stream tokens in real-time into the chat bubble
+
+  Step 4.4  Code block actions
+  ─────────────────────────────
+  [ ] Add "Copy" and "Insert into editor" buttons on
+      each code block rendered in chat replies
+
+  Step 4.5  Model settings per-chat
+  ──────────────────────────────────
+  [ ] Save temperature / max_tokens per model preset
+  [ ] Add a "Custom model" input for unlisted models
+
+═══════════════════════════════════════════════════════
+  PHASE 5 — Terminal & Runner
+═══════════════════════════════════════════════════════
+
+  Step 5.1  Real terminal (xterm.js)
+  ────────────────────────────────────
+  [ ] Add xterm.js to the output panel's TERMINAL tab
+  [ ] Spawn a child_process shell via IPC in main.js
+  [ ] Pipe stdin/stdout between xterm and the shell
+
+  Step 5.2  Run JS files
+  ───────────────────────
+  [ ] For .js files, run via Node via IPC
+      (spawn node <file> in a temp dir)
+  [ ] Stream stdout to the output panel
+
+  Step 5.3  Run with arguments
+  ─────────────────────────────
+  [ ] Add an input field near the Run button for
+      CLI arguments passed to the script
+
+  Step 5.4  pip install in Pyodide
+  ─────────────────────────────────
+  [ ] Before running Python, scan for import lines
+      and auto-install missing packages via
+      pyodide.loadPackage()
+
+═══════════════════════════════════════════════════════
+  PHASE 6 — Polish & UX
+═══════════════════════════════════════════════════════
+
+  Step 6.1  Themes
+  ─────────────────
+  [ ] Add a light theme and a high-contrast theme
+  [ ] Store theme choice in config and apply on load
+
+  Step 6.2  Keyboard shortcut help overlay
+  ──────────────────────────────────────────
+  [ ] Pressing ? shows a modal with all shortcuts
+
+  Step 6.3  Notifications / toasts
+  ──────────────────────────────────
+  [ ] Replace appendOutput for save/rename/delete
+      with a small non-blocking toast in the corner
+
+  Step 6.4  Onboarding
+  ──────────────────────
+  [ ] First launch: show a welcome tab with quick
+      steps (set API key, open folder, run code)
+
+  Step 6.5  App icon & packaging
+  ────────────────────────────────
+  [ ] Add an app icon (.icns / .ico / .png)
+  [ ] Add electron-builder config for packaging
+      into a distributable (.exe / .dmg / .AppImage)
+
+-------------------------------------------------------
+  INSTRUCTIONS FOR AI ASSISTANTS
+-------------------------------------------------------
+
+When implementing any step from this plan:
+
+  1. Mark the step done with [x] in this file.
+  2. Update the "Version" at the top if you bump
+     package.json.
+  3. Log the change in lock.txt with the date, type,
+     and a short description.
+  4. Do not skip phases — complete Phase 1 before
+     starting Phase 2.
+  5. Keep each step small and testable on its own.
+  6. If you add a new dependency, note it here under
+     the structure section.
+

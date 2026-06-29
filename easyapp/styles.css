@@ -1,19 +1,20 @@
 :root {
-  --bg: #1a1a2e;
-  --surface: #242f49;
-  --surface-hover: #2d3a57;
-  --border: #384358;
-  --border-subtle: rgba(56, 67, 88, 0.4);
-  --text: #f8fafc;
-  --text-muted: #8896b3;
-  --text-dim: #5c6b87;
-  --peach: #ffa586;
-  --peach-hover: #ffbb9f;
-  --peach-soft: rgba(255, 165, 134, 0.1);
-  --red: #bd142b;
-  --red-hover: #d91a33;
-  --red-soft: rgba(189, 20, 43, 0.12);
-  --red-dark: #5e1a2e;
+  --cream: #FFFCF2;
+  --taupe: #CCC5B9;
+  --charcoal: #403D39;
+  --black: #252422;
+  --orange: #EB5E28;
+  --orange-hover: #f97338;
+  --orange-soft: rgba(235, 94, 40, 0.12);
+  --border: rgba(37, 36, 34, 0.18);
+  --border-subtle: rgba(37, 36, 34, 0.08);
+  --surface: #ffffff;
+  --surface-hover: #f5efe5;
+  --text: #252422;
+  --text-muted: #5a544c;
+  --text-dim: #8a8478;
+  --red: #b53636;
+  --red-soft: rgba(181, 54, 54, 0.1);
 }
 
 * {
@@ -24,48 +25,51 @@
 
 body {
   font-family: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
-  background: var(--bg);
+  background: var(--cream);
   color: var(--text);
   min-height: 100vh;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
 .app {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 1.75rem 1.5rem 2rem;
 }
 
 header {
-  margin-bottom: 2.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .header-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
 h1 {
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-size: 1.15rem;
+  font-weight: 600;
   letter-spacing: -0.02em;
-  color: var(--text);
+  color: var(--black);
 }
 
 .subtitle {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .subtitle code {
-  color: var(--peach);
+  color: var(--orange);
   font-family: inherit;
+  background: var(--orange-soft);
+  padding: 0.05rem 0.4rem;
+  border-radius: 3px;
 }
 
 .badge {
@@ -76,6 +80,9 @@ h1 {
   color: var(--text-muted);
   text-transform: lowercase;
   letter-spacing: 0.02em;
+  background: var(--taupe);
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
 }
 
 .badge::before {
@@ -83,41 +90,41 @@ h1 {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--peach);
+  background: var(--orange);
 }
 
 .toolbar {
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
 }
 
 .toolbar::before {
   content: '>';
-  color: var(--peach);
-  font-size: 0.9rem;
+  color: var(--orange);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0 0.25rem;
 }
 
 .toolbar input {
   flex: 1;
-  padding: 0.5rem 0;
+  padding: 0.4rem 0;
   border: none;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   outline: none;
   background: transparent;
   color: var(--text);
   font-family: inherit;
-  transition: border-color 0.15s ease;
 }
 
 .toolbar input::placeholder {
   color: var(--text-dim);
-}
-
-.toolbar input:focus {
-  border-color: var(--peach);
 }
 
 .btn {
@@ -131,7 +138,7 @@ h1 {
   font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
-  background: transparent;
+  background: var(--surface);
   color: var(--text);
   font-family: inherit;
   transition: all 0.12s ease;
@@ -139,7 +146,7 @@ h1 {
 
 .btn:hover {
   background: var(--surface-hover);
-  border-color: var(--text-muted);
+  border-color: var(--charcoal);
 }
 
 .btn:disabled {
@@ -148,111 +155,120 @@ h1 {
 }
 
 .btn.primary {
-  background: var(--peach);
-  color: var(--bg);
-  border-color: var(--peach);
+  background: var(--orange);
+  color: var(--cream);
+  border-color: var(--orange);
 }
 
 .btn.primary:hover {
-  background: var(--peach-hover);
-  border-color: var(--peach-hover);
+  background: var(--orange-hover);
+  border-color: var(--orange-hover);
+}
+
+.btn.danger {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--red);
 }
 
 .btn.danger:hover {
   background: var(--red-soft);
   border-color: var(--red);
-  color: var(--red);
 }
 
 .btn.small {
   padding: 0.25rem 0.6rem;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
 }
 
 .projects-list {
   display: grid;
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.85rem;
+  align-items: start;
 }
 
 .project-card {
-  background: transparent;
-  border: 1px solid var(--border-subtle);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 1rem;
+  padding: 0.9rem 1rem;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  transition: border-color 0.12s ease, background 0.12s ease;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.12s ease;
+  min-height: 0;
 }
 
 .project-card:hover {
-  background: rgba(36, 47, 73, 0.3);
-  border-color: var(--border);
-}
-
-.project-info {
-  flex: 1;
-  min-width: 280px;
+  border-color: var(--charcoal);
+  box-shadow: 0 2px 8px rgba(37, 36, 34, 0.06);
 }
 
 .project-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   flex-wrap: wrap;
-  margin-bottom: 0.25rem;
 }
 
 .project-header h3 {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--black);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .type-tag {
   font-size: 0.65rem;
-  padding: 0.1rem 0.4rem;
+  padding: 0.1rem 0.45rem;
   border-radius: 3px;
   text-transform: lowercase;
   letter-spacing: 0.03em;
-  background: var(--surface);
+  background: var(--cream);
   color: var(--text-muted);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-.type-tag.static { color: var(--peach); border-color: rgba(255, 165, 134, 0.25); }
-.type-tag.python { color: var(--peach); border-color: rgba(255, 165, 134, 0.25); }
+.type-tag.static,
+.type-tag.python { color: var(--orange); border-color: rgba(235, 94, 40, 0.4); background: var(--orange-soft); }
 .type-tag.node,
 .type-tag.node-dev,
 .type-tag.node-start,
-.type-tag.node-build { color: var(--text); border-color: var(--border); }
-.type-tag.folder { color: var(--text-dim); border-color: var(--border-subtle); }
+.type-tag.node-build { color: var(--charcoal); }
+.type-tag.folder { color: var(--text-dim); }
 
 .path {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-dim);
   word-break: break-all;
-  margin-bottom: 0.6rem;
+  line-height: 1.4;
 }
 
 .status-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
-  margin-bottom: 0.6rem;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
 }
 
 .status-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   text-transform: lowercase;
+  padding: 0.15rem 0.5rem;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 3px;
 }
 
 .status-badge::before {
@@ -264,16 +280,17 @@ h1 {
 }
 
 .status-badge.idle { color: var(--text-dim); }
-.status-badge.starting { color: var(--peach); }
-.status-badge.running { color: var(--peach); }
+.status-badge.starting { color: var(--orange); border-color: rgba(235, 94, 40, 0.3); }
+.status-badge.running { color: #2a7a3a; border-color: rgba(42, 122, 58, 0.3); background: rgba(42, 122, 58, 0.06); }
 .status-badge.stopping { color: var(--red); }
 .status-badge.stopped { color: var(--text-dim); }
-.status-badge.crashed { color: var(--red); }
+.status-badge.crashed { color: var(--red); border-color: rgba(181, 54, 54, 0.3); background: var(--red-soft); }
 
 .url-link {
-  color: var(--peach);
+  color: var(--orange);
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .url-link:hover {
@@ -282,84 +299,100 @@ h1 {
 
 .command-row {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.35rem;
   flex-wrap: wrap;
-  margin-bottom: 0.6rem;
 }
 
 .log-output {
-  background: #16162a;
-  color: var(--text-muted);
+  background: var(--black);
+  color: var(--taupe);
   border-radius: 4px;
-  padding: 0.75rem;
-  font-size: 0.75rem;
-  max-height: 140px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.7rem;
+  max-height: 100px;
   overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-all;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--black);
+  min-height: 0;
+}
+
+.log-output:empty {
+  display: none;
 }
 
 .log-output::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 .log-output::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--charcoal);
   border-radius: 3px;
 }
 
 .log-line {
-  line-height: 1.5;
-}
-
-.log-line::before {
-  content: '$ ';
-  color: var(--text-dim);
+  line-height: 1.45;
 }
 
 .log-line.stderr {
-  color: var(--red);
+  color: #ff8a73;
 }
 
 .log-line.stdout {
-  color: var(--text-muted);
+  color: var(--taupe);
 }
 
 .project-actions {
   display: flex;
-  flex-direction: column;
   gap: 0.4rem;
-  min-width: 90px;
+  flex-wrap: wrap;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.project-actions .btn {
+  flex: 1;
+  min-width: 60px;
 }
 
 .loading,
 .empty,
 .error {
+  grid-column: 1 / -1;
   text-align: center;
   padding: 2.5rem;
   color: var(--text-dim);
   border: 1px dashed var(--border);
   border-radius: 6px;
   font-size: 0.85rem;
+  background: var(--surface);
 }
 
 .error {
   color: var(--red);
-  border-color: var(--red-soft);
+  border-color: rgba(181, 54, 54, 0.3);
   background: var(--red-soft);
 }
 
 footer {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-dim);
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border);
 }
 
 footer code {
-  color: var(--peach);
+  color: var(--orange);
   font-family: inherit;
+}
+
+@media (max-width: 600px) {
+  .projects-list {
+    grid-template-columns: 1fr;
+  }
+  .app {
+    padding: 1.25rem 1rem;
+  }
 }

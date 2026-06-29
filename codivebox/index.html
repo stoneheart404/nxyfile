@@ -1,0 +1,458 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CodiveBox</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════ TOP BAR ═══════════════ -->
+  <header class="top-bar" id="topBar">
+    <div class="top-left">
+      <div class="top-logo" title="CodiveBox">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#7c3aed"/><path d="M6 12l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="top-brand">CodiveBox</div>
+      <div class="top-sep"></div>
+      <div class="top-project" id="topProject" title="Current Project">
+        <span class="top-project-name" id="topProjectName">UNTITLED</span>
+        <svg class="top-project-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="project-menu hidden" id="projectMenu">
+        <div class="project-menu-item" id="openFolderItem">Open Folder...</div>
+        <div class="project-menu-sep"></div>
+        <div class="project-menu-section" id="recentProjectsSection">
+          <div class="project-menu-label">Recent</div>
+          <div id="recentProjectsList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-center">
+      <div class="top-search" id="topSearch" tabindex="0">
+        <svg class="top-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 1a5.5 5.5 0 1 0 3.536 9.65l3.157 3.157.707-.707-3.157-3.157A5.5 5.5 0 0 0 6.5 1zm-4.5 5.5a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0z"/></svg>
+        <span class="top-search-text" id="topSearchText">Search files, symbols, commands...</span>
+        <span class="top-search-hint">Ctrl+P</span>
+      </div>
+    </div>
+
+    <div class="top-right">
+      <button class="top-icon-btn" id="topRunBtn" title="Run (Ctrl+Enter)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><polygon points="4 2 14 8 4 14"/></svg>
+      </button>
+      <span class="top-sep-vert"></span>
+
+      <button class="top-build-btn" id="topBuildBtn" title="Build Project">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7H8.5V4h3v3z"/></svg> Build
+      </button>
+      <button class="top-build-btn" id="topDeployBtn" title="Deploy">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l6 5-2.5.5L8 3 4.5 5.5 2 5l6-5zM2 7l2.5.5L8 5l3.5 2.5L14 7l-6 5-6-5z"/></svg> Deploy
+      </button>
+      <span class="top-sep-vert"></span>
+
+      <button class="top-icon-btn" id="topGitBtn" title="Git Status">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><line x1="5" y1="7" x2="5" y2="10"/><line x1="8" y1="5" x2="13" y2="10"/><polyline points="13 6 13 10 16 10"/></svg>
+        <span class="top-badge hidden" id="topGitBadge">0</span>
+      </button>
+
+      <button class="top-icon-btn" id="topNotifBtn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.9c-2.56 0-4.64 2.08-4.64 4.64v3.13c0 .94-.3 1.86-.85 2.62L2 13h12l-.51-.71a4.64 4.64 0 0 1-.85-2.62V6.54c0-2.56-2.08-4.64-4.64-4.64z"/></svg>
+      </button>
+
+      <button class="top-icon-btn" id="topSettingsBtn" title="Settings">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M7.429 1.525a6.593 6.593 0 0 1 1.142 0 1 1 0 0 1 .865.713l.172.586a6.36 6.36 0 0 1 1.185.687l.556-.249a1 1 0 0 1 1.107.187l.514.514a1 1 0 0 1 .187 1.107l-.249.556c.273.37.504.766.687 1.185l.586.172a1 1 0 0 1 .713.865 6.593 6.593 0 0 1 0 1.142 1 1 0 0 1-.713.865l-.586.172a6.36 6.36 0 0 1-.687 1.185l.249.556a1 1 0 0 1-.187 1.107l-.514.514a1 1 0 0 1-1.107.187l-.556-.249a6.36 6.36 0 0 1-1.185.687l-.172.586a1 1 0 0 1-.865.713 6.593 6.593 0 0 1-1.142 0 1 1 0 0 1-.865-.713l-.172-.586a6.36 6.36 0 0 1-1.185-.687l-.556.249a1 1 0 0 1-1.107-.187l-.514-.514a1 1 0 0 1-.187-1.107l.249-.556a6.36 6.36 0 0 1-.687-1.185l-.586-.172a1 1 0 0 1-.713-.865 6.593 6.593 0 0 1 0-1.142 1 1 0 0 1 .713-.865l.586-.172a6.36 6.36 0 0 1 .687-1.185l-.249-.556a1 1 0 0 1 .187-1.107l.514-.514a1 1 0 0 1 1.107-.187l.556.249c.37-.273.766-.504 1.185-.687l.172-.586a1 1 0 0 1 .865-.713zM8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+      </button>
+
+      <div class="top-profile" title="User Profile">
+        <div class="top-avatar">U</div>
+      </div>
+
+      <div class="win-controls" id="winControls">
+        <button class="win-btn win-minimize" id="winMinimize" title="Minimize">
+          <svg width="10" height="1" viewBox="0 0 10 1"><rect width="10" height="1" fill="currentColor"/></svg>
+        </button>
+        <button class="win-btn win-maximize" id="winMaximize" title="Maximize">
+          <svg width="10" height="10" viewBox="0 0 10 10"><rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        </button>
+        <button class="win-btn win-close" id="winClose" title="Close">
+          <svg width="10" height="10" viewBox="0 0 10 10"><line x1="0" y1="0" x2="10" y2="10" stroke="currentColor" stroke-width="1.2"/><line x1="10" y1="0" x2="0" y2="10" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════ LEFT SIDEBAR ═══════════════ -->
+  <div class="sidebar-container" id="sidebarContainer">
+    <!-- Activity bar -->
+    <nav class="activity-bar" id="activityBar">
+      <div class="activity-top">
+        <button class="activity-btn active" data-sidebar="explorer" title="Explorer (Ctrl+Shift+E)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button class="activity-btn" data-sidebar="search" title="Search (Ctrl+Shift+F)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="activity-btn" data-sidebar="git" title="Source Control (Ctrl+Shift+G)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="9" y1="6" x2="18" y2="15"/><polyline points="18 9 18 15 22 15"/></svg>
+          <span class="activity-badge hidden" id="gitBadge">0</span>
+        </button>
+        <button class="activity-btn" data-sidebar="deployments" title="Deployments">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </button>
+        <button class="activity-btn" data-sidebar="database" title="Database">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </button>
+        <button class="activity-btn" data-sidebar="extensions" title="Extensions (Ctrl+Shift+X)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="8" height="8" rx="1.5"/><rect x="14" y="2" width="8" height="8" rx="1.5"/><rect x="8" y="14" width="8" height="8" rx="1.5"/></svg>
+        </button>
+      </div>
+      <div class="activity-bottom">
+        <button class="activity-btn" id="activitySettingsBtn" title="Manage">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Sidebar content panel -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header" id="sidebarHeader">
+        <span class="sidebar-title" id="sidebarTitle">EXPLORER</span>
+        <div class="sidebar-actions" id="sidebarActions">
+          <button class="sidebar-action-btn" id="sidebarAction1" title="New File">+</button>
+        </div>
+      </div>
+      <div class="sidebar-content" id="sidebarContent">
+
+        <!-- Explorer view -->
+        <div class="sidebar-view active" id="sbExplorer">
+          <div class="explorer-section">
+            <div class="section-header" data-section="files">
+              <span class="section-arrow expanded"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 4 10 8 6 12"/></svg></span>
+              <span class="section-title" id="explorerProjectTitle">UNTITLED</span>
+              <div class="section-actions">
+                <button class="section-action-btn" id="newFileBtn" title="New File">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M14 7v1H9v5H8V8H3V7h5V2h1v5h5z"/></svg>
+                </button>
+                <button class="section-action-btn" id="newFolderBtn" title="New Folder">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M7 3H2v10h12V5H9L7 3zM2 2h5.5l2 2H14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/></svg>
+                </button>
+                <button class="section-action-btn" id="refreshExplorerBtn" title="Refresh">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M13.5 2.5A7 7 0 0 0 3.94 4.1L2.5 2.7V7h4.3L5.5 5.7A5.5 5.5 0 0 1 13.5 3v-.5zM2.5 13.5a7 7 0 0 0 9.56-1.6l1.44 1.4V9H9.2l1.3 1.3A5.5 5.5 0 0 1 2.5 13v.5z"/></svg>
+                </button>
+                <button class="section-action-btn" id="collapseAllBtn" title="Collapse All">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M1 6a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H2a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H2a1 1 0 0 1-1-1z" opacity=".4"/><path d="M5.354 5.146a.5.5 0 0 0-.708.708L6.293 7.5 4.646 9.146a.5.5 0 0 0 .708.708L7 8.207l1.646 1.647a.5.5 0 0 0 .708-.708L7.707 7.5l1.647-1.646a.5.5 0 0 0-.708-.708L7 6.793 5.354 5.146z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="section-body expanded">
+              <div class="file-tree" id="fileTree"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search view -->
+        <div class="sidebar-view" id="sbSearch">
+          <div class="search-panel">
+            <div class="search-input-row">
+              <input type="text" class="field-input" id="searchInput" placeholder="Search" />
+            </div>
+            <div class="search-options">
+              <label><input type="checkbox" id="searchRegex" /> Regex</label>
+              <label><input type="checkbox" id="searchCase" /> Case Sensitive</label>
+              <label><input type="checkbox" id="searchWord" /> Whole Word</label>
+            </div>
+            <div class="search-results" id="searchResults">
+              <span class="card-empty">Search across files and folders</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Git view -->
+        <div class="sidebar-view" id="sbGit">
+          <div class="git-panel">
+            <div class="git-section">
+              <div class="git-input-row"><input type="text" class="field-input" placeholder="Message (Ctrl+Enter to commit)" /><button class="save-btn" style="width:auto;margin-top:4px">Commit</button></div>
+            </div>
+            <div class="git-section-title">CHANGES</div>
+            <div class="git-changes" id="gitChanges">
+              <span class="card-empty">No changes detected</span>
+            </div>
+            <div class="git-section-title">BRANCHES</div>
+            <div class="git-branches" id="gitBranches">
+              <span class="card-empty">main</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deployments view -->
+        <div class="sidebar-view" id="sbDeployments">
+          <div class="deploy-panel">
+            <div class="deploy-card"><h4>Vercel</h4><span class="deploy-status">Disconnected</span><button class="view-action-btn">Connect</button></div>
+            <div class="deploy-card"><h4>Railway</h4><span class="deploy-status">Disconnected</span><button class="view-action-btn">Connect</button></div>
+            <div class="deploy-card"><h4>Cloudflare</h4><span class="deploy-status">Disconnected</span><button class="view-action-btn">Connect</button></div>
+            <div class="deploy-card"><h4>Docker</h4><span class="deploy-status">Disconnected</span><button class="view-action-btn">Connect</button></div>
+          </div>
+        </div>
+
+        <!-- Database view -->
+        <div class="sidebar-view" id="sbDatabase">
+          <div class="db-panel">
+            <div class="db-card"><h4>PostgreSQL</h4><span class="deploy-status">Disconnected</span><button class="view-action-btn">Connect</button></div>
+            <div class="db-card"><h4>MySQL</h4><span class="deploy-status">Disconnected</span><button class="view-action-btn">Connect</button></div>
+            <div class="db-card"><h4>SQLite</h4><span class="deploy-status">Disconnected</span><button class="view-action-btn">Connect</button></div>
+            <div class="db-card"><h4>MongoDB</h4><span class="deploy-status">Disconnected</span><button class="view-action-btn">Connect</button></div>
+          </div>
+        </div>
+
+        <!-- Extensions view -->
+        <div class="sidebar-view" id="sbExtensions">
+          <div class="ext-panel">
+            <div class="search-input-row"><input type="text" class="field-input" placeholder="Search Extensions" /></div>
+            <span class="card-empty">No extensions installed</span>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+  </div>
+
+  <div class="sidebar-resize" id="sidebarResize"></div>
+
+  <!-- ═══════════════ CENTER EDITOR ═══════════════ -->
+  <main class="editor-area" id="editorArea">
+    <div class="tabs-bar" id="tabsBar"></div>
+    <div class="editor-breadcrumbs" id="editorBreadcrumbs"></div>
+    <div class="editor-main" id="editorMain">
+      <div class="editor-pane active" id="editorPane1">
+        <div class="editor-container"><div id="editor"></div></div>
+      </div>
+      <div class="editor-pane" id="editorPane2">
+        <div class="editor-container"><div id="editor2"></div></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="right-resize" id="rightResize"></div>
+
+  <!-- ═══════════════ RIGHT PANEL (AI) ═══════════════ -->
+  <aside class="right-panel" id="rightPanel">
+    <div class="right-panel-tabs" id="rightTabs">
+      <button class="right-tab active" data-rtab="chat">Chat</button>
+      <button class="right-tab" data-rtab="context">Context</button>
+      <button class="right-tab" data-rtab="actions">Actions</button>
+      <button class="right-tab" data-rtab="tasks">Tasks</button>
+      <button class="right-tab" data-rtab="snippets">Snippets</button>
+      <div class="right-tab-actions">
+        <button class="right-panel-btn" id="rightPanelCollapse" title="Toggle Panel">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="12" height="12" rx="1" opacity="0.3"/><rect x="12" y="2" width="3" height="12" rx="1"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="right-panel-content" id="rightPanelContent">
+
+      <!-- Chat tab -->
+      <div class="rtab-panel active" id="rtabChat">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg bot"><div class="msg-avatar">C</div><div class="msg-content"><div class="msg-header"><span class="msg-author">CodiveBox</span></div><div class="msg-text">Hello. I can help explain, generate, and review code. Ask me anything or use the Actions tab for quick tools.</div></div></div>
+        </div>
+        <div class="chat-input-bar">
+          <div class="chat-input-wrapper">
+            <textarea class="chat-input" id="chatInput" rows="1" placeholder="Ask CodiveBox..."></textarea>
+            <div class="chat-bottom-row">
+              <select class="field-select chat-model" id="chatModelSelect" title="Model">
+                <option value="deepseek-chat">DeepSeek Chat</option>
+                <option value="gpt-4o">GPT-4o</option>
+                <option value="claude-4-sonnet">Claude 4 Sonnet</option>
+              </select>
+              <button class="chat-send-btn" id="chatSendBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Context tab -->
+      <div class="rtab-panel" id="rtabContext">
+        <div class="context-section">
+          <h4>Current File</h4>
+          <div class="context-item" id="ctxCurrentFile"><span class="card-empty">No file open</span></div>
+        </div>
+        <div class="context-section">
+          <h4>Added Files</h4>
+          <div class="context-list" id="ctxFiles"><span class="card-empty">No files added</span></div>
+          <div class="context-actions">
+            <button class="view-action-btn" id="ctxAddFile">+ Add File</button>
+            <button class="view-action-btn" id="ctxAddFolder">+ Add Folder</button>
+          </div>
+        </div>
+        <div class="context-section">
+          <h4>Terminal Output</h4>
+          <div class="context-terminal-output" id="ctxTerminal"><span class="card-empty">No terminal output</span></div>
+        </div>
+        <div class="context-section">
+          <h4>Repository</h4>
+          <div class="context-item" id="ctxRepo"><span class="card-empty">No repository loaded</span></div>
+        </div>
+      </div>
+
+      <!-- Actions tab -->
+      <div class="rtab-panel" id="rtabActions">
+        <div class="actions-grid">
+          <button class="action-card" data-action="generate-code">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M4.72 3.22a.75.75 0 0 1 1.06 1.06L2.06 8l3.72 3.72a.75.75 0 1 1-1.06 1.06L.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25zm6.56 0a.75.75 0 1 0-1.06 1.06L13.94 8l-3.72 3.72a.75.75 0 1 0 1.06 1.06l4.25-4.25a.75.75 0 0 0 0-1.06L11.28 3.22z"/></svg>
+            <span>Generate Code</span>
+          </button>
+          <button class="action-card" data-action="refactor">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M11.5 1.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-1 0V2a.5.5 0 0 1 .5-.5zM4 6.5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zM2 9.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5zm5-4a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z"/></svg>
+            <span>Refactor</span>
+          </button>
+          <button class="action-card" data-action="create-component">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0 4a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0 4a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0 4a1 1 0 1 0 0 2 1 1 0 0 0 0-2zM14 1H5v2h9V1zm0 4H5v2h9V5zm0 4H5v2h9V9zm0 4H5v2h9v-2z"/></svg>
+            <span>Create Component</span>
+          </button>
+          <button class="action-card" data-action="write-tests">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-3.25a.75.75 0 0 1 .75.75v2.69l1.78 1.78a.75.75 0 1 1-1.06 1.06L7.75 9.31V5.5A.75.75 0 0 1 8 4.75z"/></svg>
+            <span>Write Tests</span>
+          </button>
+          <button class="action-card" data-action="generate-docs">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M2.5 1h8l3 3v10.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5v-12A1.5 1.5 0 0 1 2.5 1zM10 2v3h3L10 2z"/></svg>
+            <span>Generate Docs</span>
+          </button>
+          <button class="action-card" data-action="find-bugs">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M4.355.522a.5.5 0 0 1 .623.333l.291.956A4.979 4.979 0 0 1 8 1c1.007 0 1.946.298 2.731.811l.29-.956a.5.5 0 1 1 .957.29l-.41 1.352A4.985 4.985 0 0 1 13 6h.5a.5.5 0 0 0 .5-.5 1 1 0 0 1 2 0A2.5 2.5 0 0 1 13.5 8H13v1h.5a.5.5 0 0 1 0 1H13a4.985 4.985 0 0 1-1.432 3.503l.41 1.352a.5.5 0 1 1-.957.29l-.291-.956A4.979 4.979 0 0 1 8 15a4.979 4.979 0 0 1-2.731-.811l-.29.956a.5.5 0 0 1-.957-.29l.41-1.352A4.985 4.985 0 0 1 3 10h-.5a.5.5 0 0 1 0-1H3V8h-.5A2.5 2.5 0 0 1 0 5.5a1 1 0 0 1 2 0 .5.5 0 0 0 .5.5H3c0-1.364.547-2.601 1.432-3.503l-.41-1.352a.5.5 0 0 1 .333-.623zM4 8v2a4 4 0 0 0 3 3.874V8H4zm4 5.874A4 4 0 0 0 12 10V8H8v5.874zM12 7V6a4 4 0 0 0-3-3.874V7h3zM7 2.126A4 4 0 0 0 4 6v1h3V2.126z"/></svg>
+            <span>Find Bugs</span>
+          </button>
+          <button class="action-card" data-action="optimize">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.354 4.646a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7 9.293l3.646-3.647a.5.5 0 0 1 .708 0z"/></svg>
+            <span>Optimize</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tasks tab -->
+      <div class="rtab-panel" id="rtabTasks">
+        <div class="tasks-header">
+          <button class="view-action-btn primary" id="addTaskBtn">+ New Task</button>
+        </div>
+        <div class="tasks-list" id="tasksList">
+          <span class="card-empty">No tasks yet</span>
+        </div>
+      </div>
+
+      <!-- Snippets tab -->
+      <div class="rtab-panel" id="rtabSnippets">
+        <div class="snippets-list" id="snippetsList">
+          <div class="snippet-card">
+            <div class="snippet-header">React Hook — useLocalStorage</div>
+            <div class="snippet-lang">TypeScript</div>
+          </div>
+          <div class="snippet-card">
+            <div class="snippet-header">Auth Middleware</div>
+            <div class="snippet-lang">JavaScript</div>
+          </div>
+          <div class="snippet-card">
+            <div class="snippet-header">Database Connection Pool</div>
+            <div class="snippet-lang">Python</div>
+          </div>
+        </div>
+        <button class="view-action-btn" style="margin:8px 12px">+ New Snippet</button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ═══════════════ BOTTOM PANEL ═══════════════ -->
+  <footer class="bottom-panel" id="bottomPanel">
+    <div class="bottom-resize" id="bottomResize"></div>
+    <div class="bottom-header">
+      <div class="bottom-tabs">
+        <span class="bottom-tab active" data-btab="terminal">TERMINAL</span>
+        <span class="bottom-tab" data-btab="output">OUTPUT</span>
+        <span class="bottom-tab" data-btab="problems">PROBLEMS</span>
+        <span class="bottom-tab" data-btab="ai-activity">AI ACTIVITY</span>
+      </div>
+      <div class="bottom-actions">
+        <button class="bottom-close" id="toggleBottomPanel" title="Close Panel">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="bottom-content" id="bottomContent">
+      <div class="btab-panel active" id="btabTerminal"><div class="terminal-container" id="terminalContainer"></div></div>
+      <div class="btab-panel" id="btabOutput"><div class="output-content" id="outputContent"></div></div>
+      <div class="btab-panel" id="btabProblems"><div class="output-line info" style="padding:8px 12px">Problems will appear here</div></div>
+      <div class="btab-panel" id="btabAiActivity"><div class="output-line info" style="padding:8px 12px">AI activity log</div></div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════ STATUS BAR ═══════════════ -->
+  <div class="status-bar" id="statusBar">
+    <div class="status-left">
+      <span class="status-item" id="codingTimer">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="codingTimerText">0m</span>
+      </span>
+    </div>
+    <div class="status-right">
+      <span class="status-item" id="statusLanguage">Python</span>
+      <span class="status-item" id="statusLineCol">Ln 1, Col 1</span>
+      <span class="status-item go-live" id="goLiveBtn" title="Go Live">Go Live</span>
+      <span class="status-item" id="statusConnection"><span class="status-dot offline"></span></span>
+    </div>
+  </div>
+
+  <!-- ═══════════════ MODALS ═══════════════ -->
+  <div class="cmd-palette hidden" id="cmdPalette">
+    <div class="cmd-palette-inner">
+      <input type="text" class="cmd-palette-input" id="cmdPaletteInput" placeholder="Type a command..." />
+      <div class="cmd-palette-list" id="cmdPaletteList"></div>
+    </div>
+  </div>
+
+  <div class="shortcuts-modal hidden" id="shortcutsModal">
+    <div class="shortcuts-overlay"></div>
+    <div class="shortcuts-dialog">
+      <div class="shortcuts-header"><span>Keyboard Shortcuts</span><button class="shortcuts-close" id="shortcutsClose">&times;</button></div>
+      <div class="shortcuts-body" id="shortcutsBody"></div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="settings-modal hidden" id="settingsModal">
+    <div class="settings-overlay"></div>
+    <div class="settings-dialog">
+      <div class="settings-modal-header"><h3>Settings</h3><button class="shortcuts-close" id="settingsModalClose">&times;</button></div>
+      <div class="settings-body">
+        <div class="settings-section">
+          <h4>Editor</h4>
+          <div class="field-group"><label>Auto Save</label><select class="field-input" id="autoSaveSelect"><option value="off">Off</option><option value="afterDelay">After Delay</option><option value="onFocusChange">On Focus Change</option></select></div>
+        </div>
+        <div class="settings-section">
+          <h4>API Configuration</h4>
+          <div class="field-group"><label>API URL</label><input type="url" class="field-input" id="apiUrl" /></div>
+          <div class="field-group"><label>API Key</label><div class="input-wrapper"><input type="password" class="field-input" id="apiKey" /><button class="input-toggle" id="toggleKey"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+          <div class="field-group"><label>Temperature</label><div class="range-row"><input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7" /><input type="text" class="field-input" id="temperatureVal" value="0.7" readonly /></div></div>
+          <div class="field-group"><label>Max Tokens</label><div class="range-row"><input type="range" id="maxTokens" min="256" max="32768" step="256" value="4096" /><input type="text" class="field-input" id="maxTokensVal" value="4096" readonly /></div></div>
+          <div class="field-group"><label>Top P</label><div class="range-row"><input type="range" id="topP" min="0" max="1" step="0.05" value="0.9" /><input type="text" class="field-input" id="topPVal" value="0.9" readonly /></div></div>
+          <div class="field-group"><label>System Prompt</label><textarea class="field-input" id="systemPrompt" rows="4">You are CodiveBox, an expert AI coding assistant. You assist the user by explaining, generating, reviewing, refactoring, and documenting code. Never delete files, deploy, run commands, push git, install packages, or modify multiple files without explicit user approval.</textarea></div>
+          <button class="save-btn" id="saveConfigBtn">Save Config</button>
+          <button class="view-action-btn" id="testConnectionBtn" style="margin-top:6px;width:100%">Test Connection</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context Menu -->
+  <div class="context-menu hidden" id="contextMenu"></div>
+
+  <!-- ═══════════════ EXTERNAL DEPENDENCIES ═══════════════ -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

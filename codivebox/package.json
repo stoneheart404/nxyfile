@@ -1,0 +1,15 @@
+{
+  "name": "codivebox",
+  "version": "2.0.0",
+  "description": "CodiveBox — Code Studio",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "serve": "npx http-server -p 8787 -c-1 --cors"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11"
+  }
+}

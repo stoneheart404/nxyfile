@@ -1,0 +1,433 @@
+=======================================================
+  DEVFLOW LOCK FILE — UPDATE & UPGRADE LOG
+=======================================================
+
+PURPOSE:
+  This file tracks every update, upgrade, or significant
+  change made to the devflow project. Any AI assistant or
+  developer working on this project MUST log changes here.
+
+-------------------------------------------------------
+  INSTRUCTIONS FOR AI ASSISTANTS
+-------------------------------------------------------
+
+When you install, update, upgrade, or change anything in
+this project (dependencies, config, code structure, etc.),
+you MUST append a new entry to the CHANGELOG section below.
+
+Entry format:
+  [YYYY-MM-DD HH:MM] | <type> | <short description>
+  Details: <what changed and why>
+
+  Types:
+    - INSTALL   : New package or tool installed
+    - UPDATE    : Existing package or dependency updated
+    - UPGRADE   : Major version bump or structural change
+    - CONFIG    : Configuration file changed
+    - REFACTOR  : Code structure or architecture changed
+    - BUGFIX    : Bug fix applied
+    - FEATURE   : New feature added
+    - REMOVE    : Package or file removed
+
+Rules:
+  1. ALWAYS append — never edit or delete existing entries.
+  2. Use UTC time when possible.
+  3. Include package versions when relevant (e.g., express 4.18 → 4.19).
+  4. If multiple changes happen in one session, log each separately.
+  5. Keep descriptions concise but specific.
+
+-------------------------------------------------------
+  CHANGELOG
+-------------------------------------------------------
+
+[2026-06-06 00:00] | CONFIG | lock.txt created
+  Details: Initialized this update log file for devflow project.
+           All future updates must be recorded here.
+
+
+[2026-06-06 15:00] | BUGFIX | Bottom panel layout fixed — no longer overlaps content
+  Details: Replaced position:fixed output panel with a proper CSS grid row (grid-area:panel).
+           Added body.panel-open class toggling so the grid row expands/collapses correctly.
+           Output panel tabs updated to: OUTPUT, PROBLEMS, DEBUG CONSOLE, TERMINAL, PORTS.
+           Clicking any tab now auto-opens the panel if it was collapsed.
+           Sidebar and chat resize handles bottom updated to match new layout.
+
+[2026-06-06 15:30] | FEATURE | Image paste handling in chat
+  Details: Added paste event listener on chatInput that detects image data.
+           If the selected model doesn't support images, shows the error as a bot
+           chat message instead of putting it in the status bar.
+
+[2026-06-06 15:35] | REMOVE | Editor toolbar (Save, Explain, Fix, Run buttons)
+  Details: Removed the .editor-toolbar from index.html and cleaned up unused
+           CSS rules (.editor-toolbar, .et-btn, .et-sep, .run-action-btn) and
+           --toolbar-height CSS variable. Removed dangling event listener wiring
+           in init() for removed buttons.
+
+[2026-06-06 15:40] | FEATURE | AI can create and write to files via filename hints
+  Details: AI code blocks can now specify a target file via a first-line comment
+           (e.g., // file: app.py or # filename: style.css). The Apply button
+           detects this, creates the file if it doesn't exist, opens it, and
+           writes the code there — like VS Code and Cursor/antigravity apps.
+
+[2026-06-06 16:00] | FEATURE | AI Settings icon in activity bar + auto token mode
+  Details: Added a dedicated AI Settings icon (brain/chip SVG) in the activity bar
+           between Extensions and the gear. The AI Settings panel includes API URL,
+           API Key, Model selector, Temperature, Max Tokens, and a "Auto — fit output
+           to save tokens" checkbox. When auto is on, sendMsg() estimates input token
+           count from context window and adjusts max_tokens to avoid overspending.
+
+[2026-06-06 16:20] | FEATURE | Expanded model selection with custom model support
+  Details: Added 20+ model options organized in groups: OpenAI (GPT-4o, GPT-4o Mini,
+           GPT-4.1 series, o3, o4 Mini), Anthropic (Claude 3.5/3/4 series), Google
+           (Gemini 2.0 Flash, 2.5 Flash/Pro), DeepSeek (Chat, Reasoner), and Other
+           (Llama 3.3, Mistral Large, Codestral, Qwen 2.5 Coder). Added a Custom
+           option with a text input field that appears when selected. Auto token
+           context map updated for all models.
+
+[2026-06-06 16:30] | BUGFIX | Fixed null reference error on topP slider
+  Details: Added missing #topP and #topPVal range inputs to the AI Settings
+           Parameters panel. sendMsg() and bindSlider() were referencing these
+           elements but they didn't exist in the HTML, causing "Cannot read
+           properties of null (reading 'value')" on every message send.
+  Details: Added a dedicated AI Settings icon (brain/chip SVG) in the activity bar
+           between Extensions and the gear. The AI Settings panel includes API URL,
+           API Key, Model selector, Temperature, Max Tokens, and a "Auto — fit output
+           to save tokens" checkbox. When auto is on, sendMsg() estimates input token
+           count from context window and adjusts max_tokens to avoid overspending.
+
+[2026-06-15 12:00] | FEATURE | Phase 1 complete — Stability & Core Fixes
+  Details: Step 1.1: Config sync via IPC (main.js read/write handlers, preload.js
+           readConfig/writeConfig, app.js loads config via IPC with fetch fallback,
+           saveConfigBtn writes back to config.json).
+           Step 1.2: Disk file save confirmation (save-file-disk replies back to
+           renderer with success/failure, saveActiveFile shows "saved to disk" vs
+           "saved to memory" in output panel).
+           Step 1.3: Command palette keyboard nav (already implemented — verified).
+           Step 1.4: Broken toolbar SVG (toolbar already removed in previous session).
+           Step 1.5: Error handling (improved API error messages for 401/403/429/5xx,
+           added testConnection() function and Test Connection button in Settings).
+           All Phase 1 steps marked done in roadmap.txt.
+
+[2026-06-07 12:01] | REMOVE | In-app menu dropdowns and nav items
+  Details: Removed all .cc-menu nav items (File, Edit, Selection, View, Go, Run,
+           Terminal, Help) and all 8 dropdown menus from index.html. Removed
+           corresponding menu dropdown event handling code (~80 lines) from app.js.
+           Replaced with a simple .cc-brand "DevFlow" label. Cleaned up unused CSS.
+
+[2026-06-07 12:02] | FEATURE | Web app mode with browser support
+  Details: Added "serve": "npx http-server -p 8787 -c-1 --cors" script to
+           package.json. The app auto-detects Electron vs browser via window.devflow.
+           In browser mode, window controls are hidden, drag region is disabled,
+           and a "DevFlow Web" indicator is shown in the status bar.
+
+[2026-06-07 12:03] | CONFIG | Status bar color changed to dark theme
+  Details: Changed status bar background from #007acc (blue) to #2d2d2d to
+           better match the rest of the dark UI theme.
+
+[2026-06-07 12:04] | FEATURE | Go Live button to open web version in browser
+  Details: Added "Go Live" status item in the status bar (visible in both
+           Electron and browser modes). In Electron mode, opens http://localhost:8787
+           in the default browser via shell.openExternal IPC. In browser mode,
+           copies the current page URL to clipboard with a toast notification.
+
+[2026-06-07 13:00] | REMOVE | Status bar left items (main, emoji, filename)
+  Details: Removed "main", "🔀", and filename display from status bar left.
+           Replaced with a coding timer that shows session time in a human-readable
+           format (e.g., "1h 17m") with a clock icon. Timer updates every minute.
+
+[2026-06-07 13:01] | REFACTOR | Sidebar header — replaced icon buttons with "..." dropdown
+  Details: Removed individual New File / New Folder / Refresh / Collapse icons
+           from sidebar header. Replaced with a single "..." (more actions) button
+           that opens a dropdown to switch sidebar views: Open Editors, Explorer,
+           Outline, Timeline.
+
+[2026-06-07 13:02] | FEATURE | Hierarchical folder tree in Explorer
+  Details: Replaced flat file list with a proper folder tree using path-based
+           keys (e.g., "src/app.js"). Added createFolder, deleteFolder,
+           renameFolder, createFileInFolder, createFolderInFolder functions.
+           Folders are collapsible with chevron arrows. Collapse state persists
+           in localStorage. Added right-click context menus on folders and files
+           with rename/delete/new-file/new-folder options.
+
+[2026-06-07 13:03] | FEATURE | Open Editors view
+  Details: New sidebar view showing all currently open files as a clickable list.
+           Clicking an item switches to that file in the editor.
+
+[2026-06-07 13:04] | FEATURE | Outline view
+  Details: New sidebar view that parses the active file to extract symbols:
+           Python (def/class), JavaScript (function/const/class), HTML (tags),
+           CSS (selectors). Clicking a symbol jumps the editor cursor to that line.
+
+[2026-06-07 13:05] | FEATURE | Timeline view
+  Details: New sidebar view showing edit history across all files with timestamps.
+           Tracks file opens, saves, renames, deletions. Shows relative time
+           (e.g., "2h ago"). Data stored in localStorage per file.
+
+[2026-06-07 13:10] | REMOVE | Status bar right items (tokens, language, model)
+  Details: Removed "0 tokens", "Python", and "DeepSeek" labels from the status bar
+           right side. The bar now only shows Go Live button and connection dot.
+
+[2026-06-07 13:20] | REFACTOR | Go Live now previews current file in browser
+  Details: Changed Go Live from opening the DevFlow web app to previewing the
+           currently active file. For HTML/CSS/JS files, opens in the default
+           browser via file:// URL (Electron) or Blob URL (browser). For files
+           linked to disk, opens the real file path.
+
+[2026-06-07 13:21] | FEATURE | Open Folder — work with real files on disk
+  Details: Added "Open Folder..." command to the command palette. In Electron,
+           opens a native folder picker, walks the directory, and loads all
+           files into the workspace. Each file tracks its original diskPath so
+           that saves write back to the real file on disk. Added IPC handlers in
+           main.js for save-file-disk, create-folder-disk, delete-file-disk,
+           rename-file-disk. Preload.js exposes these to the renderer.
+
+[2026-06-07 13:22] | FEATURE | Disk sync for file operations
+  Details: createFile, deleteFile, renameFile, createFolder, deleteFolder,
+           renameFolder now also perform the corresponding operation on disk
+           when the item has a diskPath. This keeps the virtual FS and the real
+           folder in sync. Ctrl+S and Save File command both use saveActiveFile()
+           which writes to localStorage and disk simultaneously.
+
+[2026-06-07 13:30] | UPGRADE | Go Live now runs a real HTTP server (Live Server)
+  Details: Replaced file:// and Blob URL preview with a built-in Node.js HTTP
+           static server in main.js. When Go Live is clicked on a disk-linked
+           file, DevFlow starts a local server on a random port (127.0.0.1),
+           serves the entire project folder, and opens http://localhost:PORT/file
+           in the default browser. This means relative CSS/JS/image imports work
+           correctly, just like VS Code Live Server. Virtual files still fall
+           back to Blob URL preview.
+
+[2026-06-07 13:35] | BUGFIX | Go Live opens in system browser, not Electron window
+  Details: Changed go-live IPC from fire-and-forget (send) to request-response
+           (invoke/handle) so the renderer knows when the server started and what
+           URL to use. Added error handling around shell.openExternal. Server URL
+           is now copied to clipboard automatically and shown in the output panel
+           so the user can manually paste it into any browser if the auto-open
+           doesn't work on their system.
+
+[2026-06-07 14:00] | REFACTOR | Sidebar restacked like VS Code
+  Details: Replaced separate sidebar views (Explorer, Open Editors, Outline,
+           Timeline) with a single stacked panel where all four sections appear
+           vertically in one bar. Each section has a collapsible header with a
+           chevron arrow (rotates when collapsed). The "..." dropdown now toggles
+           section visibility with checkmarks (✓) instead of switching views.
+           Section collapse/visibility state persists in localStorage. Moved
+           New File / New Folder / Collapse All / Refresh buttons into the
+           PROJECTS section header. Sidebar title stays as "EXPLORER".
+
+[2026-06-07 14:15] | REFACTOR | Sidebar design matched exactly to VS Code screenshot
+  Details: Changed the "..." button from 9-dot unicode to actual three dots.
+           Added NPM Scripts section. Section headers now use right-pointing ▸
+           arrows that rotate 90° when expanded, matching VS Code chevrons.
+           Added horizontal borders between sections. PROJECTS header action
+           buttons changed from text labels to small SVG icons. Dropdown items
+           use gap layout with inline checkmarks instead of space-between.
+
+[2026-06-07 14:30] | REFACTOR | Bigger arrows and dynamic folder name
+  Details: Section chevrons, folder tree chevrons, and file tree leaf arrows
+           increased from 10px to 14px for better visibility like VS Code.
+           "PROJECTS" label is now dynamic — shows "UNTITLED" by default, but
+           when a real folder is opened it displays the folder name in UPPERCASE
+           (e.g., "DEVFLOW", "BLOG_DRAFTIST"). The name persists in localStorage
+           and restores on app restart.
+
+[2026-06-07 14:45] | REFACTOR | Crisp SVG chevrons and compact section layout
+  Details: Replaced all unicode arrows (▸, ▸, ›) with inline SVG chevron
+           icons for sharp rendering at any size. Folder arrows and section
+            arrows are now 16px SVGs inside 22px containers. Fixed folder
+            arrow rotation to use .expanded class with +90deg (was using
+            .collapsed with -90deg). Removed flex:1 from section bodies so
+            sections stack naturally and only take the height they need
+            instead of forcing equal-size blocks. Reduced vertical padding
+            on file items, outline items, and timeline items for a tighter
+            VS Code-like density.
+
+[2026-06-07 15:00] | REFACTOR | VS Code-style right-click context menus
+  Details: Removed inline edit/delete buttons from file and folder items.
+           Added comprehensive right-click context menus matching VS Code's
+           design with items: New File, New Folder, Reveal in File Explorer,
+           Open in Integrated Terminal, Find in Folder, Cut, Copy, Paste,
+           Copy Path, Copy Relative Path, Rename, Delete, Collapse All.
+           Updated context menu CSS to use VS Code's dark theme colors
+           (#252526 background, #094771 hover). Added keyboard shortcut
+           hints (F2, Del, Ctrl+X, etc.) to menu items. Menus now stay
+           within viewport bounds.
+
+[2026-06-07 15:15] | FEATURE | Settings gear dropdown menu
+  Details: Added VS Code-style settings dropdown that appears when clicking
+           the gear icon in the activity bar. Menu items: Command Palette
+           (Ctrl+Shift+P), Profiles, Settings (Ctrl+,), Extensions
+           (Ctrl+Shift+X), Keyboard Shortcuts (Ctrl+K Ctrl+S), Snippets,
+           Tasks, Themes (with submenu arrow), Settings Sync toggle,
+           Check for Updates. Dropdown appears to the right of the gear
+           icon and closes when clicking outside.
+
+[2026-06-07 15:30] | FEATURE | Integrated Terminal (xterm.js)
+  Details: Added xterm.js terminal in the output panel's TERMINAL tab.
+           In Electron, spawns a real PowerShell/bash shell process and pipes
+           I/O through IPC. Terminal starts when clicking the TERMINAL tab.
+           Supports cursor blink, custom font, dark theme colors.
+
+[2026-06-07 15:31] | FEATURE | Keyboard Shortcuts modal
+  Details: Clicking "Keyboard Shortcuts" in the settings dropdown opens a
+           modal overlay showing all shortcuts with their keybinds.
+
+[2026-06-07 15:32] | FEATURE | Light/Dark theme switching
+  Details: Clicking "Themes" in the settings dropdown toggles between dark
+           and light themes. Theme persists in localStorage and restores on
+           app restart. Light theme uses VS Code Light+ colors.
+
+[2026-06-07 15:33] | FEATURE | Context menu actions fully wired
+  Details: "Reveal in File Explorer" now opens the file location in the
+           system file explorer (Electron only). "Find in Folder" switches
+           to the Search sidebar. "Open in Integrated Terminal" switches
+           to the Terminal tab. "Copy Path" and "Copy Relative Path" copy
+           to clipboard. All context menu actions now produce feedback.
+
+[2026-06-07 15:34] | REFACTOR | Output panel supports multiple tab contents
+  Details: Each output panel tab (OUTPUT, PROBLEMS, DEBUG CONSOLE, TERMINAL,
+           PORTS) now has its own content div. Clicking tabs switches between
+           them. Terminal tab initializes xterm.js on first click.
+
+[2026-06-09 10:30] | CONFIG | config.json gitignored for API key protection
+  Details: Added **/config.json to root .gitignore. The DevFlow config.json
+           contains a DeepSeek API key in plaintext which should never be
+           committed to version control. Will eventually migrate to Electron
+           safeStorage/keytar encryption.
+
+[2026-06-09 10:45] | CONFIG | DevFlow verified — all JS syntax clean
+  Details: Checked app.js, main.js, preload.js — all pass node -c syntax
+           check. Electron app launches via npm start. Config loads from
+            config.json. 38 total lock entries.
+
+[2026-06-14 12:00] | UPGRADE | Renamed project from DevFlow to CodiveBox
+  Details: Changed all branding, UI strings, localStorage keys, IPC bridge
+           name (window.devflow → window.codivebox), bot avatar (D → C),
+           and system prompts across all files: package.json, package-lock.json,
+           main.js, preload.js, index.html, app.js, style.css, config.json,
+           README.md, roadmap.txt. All internal key prefixes updated
+            (devflow_* → codivebox_*).
+
+[2026-06-14 12:30] | UPGRADE | Full Antigravity navigation architecture
+  Details: Completely redesigned the app layout from a VS Code file-centric
+           model to an Antigravity-style task/agent/execution model with 5
+           persistent layout regions: Top Bar (workspace switcher, global
+           search, model selector, notifications), Left Navigation Rail (10
+           items: Home, Inbox, Workspaces, Missions, Agents, Artifacts,
+           Browser, Integrations, Analytics, Settings — icon-only with
+           expand), Main Workspace (views: Dashboard, Inbox, Workspaces,
+           Missions with 8-tab detail, Agents, Artifacts, Browser, Integrations,
+           Analytics, Settings, plus Code Editor with Explorer), Right Agent
+           Panel (agent selector, status, controls, chat, subagents), Bottom
+           Activity Panel (8 tabs: Terminal, Output, Problems, Tasks, Logs,
+           Agent Logs, Browser Logs, Deployments). Rewrote index.html (new
+           5-region CSS grid), style.css (dark theme with purple accent,
+           collapsible panels), and app.js (nav rail switching, workspace
+           views, agent system, settings, command palette keyboard nav).
+           Preserved all core functionality: file system, CodeMirror editor,
+            AI chat, Pyodide runner, terminal, config loading, Go Live.
+
+[2026-06-17 13:05] | FEATURE | Step 2.4: Split editor with independent file panes
+  Details: Added split editor support. Split button in the tabs bar toggles a second
+            CodeMirror instance side-by-side (body.split-open CSS class). Each pane has
+            independent file state (openFiles1/2, activeFile1/2) tracked via per-pane arrays.
+            Clicking a pane sets activePane, which controls where file operations (open,
+            save, run, rename, delete) are targeted. Clicking a file in the explorer tree
+            opens it in the currently active pane. Editor2 shares all features: syntax
+            highlighting, autocomplete, indent guides, fold gutter. Ctrl+\ shortcut toggles
+             split. Status bar updates when switching panes. Both panes get change/cursor/
+             autocomplete/renderLine handlers. HTML structure updated with editor-main flex
+             container and two editor-pane divs inside #editorArea.
+   Details: Added initEditor2() that creates the second editor on-demand (lazy init).
+            createEditorConfig() shared between both editors. toggleSplit() manages open/close.
+            When split opens and pane 2 has no file, it mirrors pane 1's file. All command
+            palette entries updated to target active pane via getEditor()/getActiveFile().
+            Fixed all references from global activeFile to per-pane activeFile1/activeFile2.
+
+
+   Details: Added indent guide rendering via CodeMirror "renderLine" event. For each line,
+            calculates indentation level and draws thin vertical lines (1px, 8% opacity white)
+            at each indent unit (4 spaces) position. Guides update dynamically on scroll/type.
+            Added CSS for .cm-indent-guide (absolute positioned, pointer-events:none) for a
+            VS Code-style indent visualization. Works for all language modes.
+
+
+   Details: Added per-language hint addons (javascript-hint, python-hint, sql-hint, css-hint,
+            html-hint, xml-hint). Set up dynamic hintOptions so the editor switches between
+            language-specific completions based on active mode (e.g., Python files get
+            python-hint, SQL files get sql-hint) with anyword-hint as fallback. Added
+            auto-trigger on "change" event — autocomplete fires automatically when the
+            current word is 2+ characters after a single-character input.
+
+
+   Details: Added CodeMirror 5 mode scripts for SQL (text/x-sql), Shell/Bash (text/x-sh),
+            YAML (text/x-yaml), and TypeScript (application/typescript via separate typescript.min.js).
+            Updated language detection maps in app.js (openFile/createFile/newFileBtn/applyButton),
+            and main.js (getLang for disk files). Added extensions: .ts, .tsx, .jsx, .sql, .sh,
+            .bash, .yaml, .yml, .toml, .xml, .svg. TOML files use text/x-toml mode string
+            (no separate mode file; gracefully falls back to plain text).
+
+
+   Details: Completely redesigned from the Antigravity mission/agent model to a
+            VS Code-style coding playground. Layout: Top Bar (logo, project name,
+            global search, Run/Build/Deploy/Git/Notifications/Settings),
+            Left Sidebar with Activity Bar (Explorer, Search, Git, Deployments,
+            Database, Extensions + collapsible sidebar panel — default 280px),
+            Center Editor (70% focus — tabs, breadcrumbs, CodeMirror editor),
+            Right Panel (380px, collapsible — Chat, Context, Actions, Tasks,
+            Snippets tabs), Bottom Panel (250px, resizable — Terminal, Output,
+            Problems, AI Activity), Status Bar (timer, language, line/col,
+            Go Live, connection). AI rules: suggest/explain/generate/review/
+            refactor/document only — cannot delete, deploy, run commands, push
+            git, or modify multiple files without user approval. Settings moved
+            to modal dialog (Ctrl+,). All core functionality preserved.
+
+[2026-06-28 00:00] | BUGFIX | Restored CodiveBox from dangling git commit
+  Details: All source files were accidentally lost, leaving only config.json and
+           node_modules. Recovered the full working tree from dangling commit
+           18e25908b31870e988cb743ed5fb754c380fdf50 (June 18). App launches
+           successfully after restore.
+
+[2026-06-28 00:05] | FEATURE | Inline rename for new files/folders in Explorer
+  Details: New File and New Folder toolbar buttons now create the item in the
+           selected folder (or root) and immediately enter inline rename mode,
+           matching VS Code behavior instead of using prompt dialogs.
+
+[2026-06-28 00:10] | FEATURE | Preview mode for file tree single-click
+  Details: Single-clicking a file in the Explorer opens it as a preview tab
+           (italic tab). Double-clicking or editing promotes it to a permanent
+           tab. Closing a preview tab removes it; opening another preview replaces
+           the previous one. Added .tab.preview and .tab-dot styles for dirty
+           indicator.
+
+[2026-06-28 00:15] | FEATURE | Auto Save with configurable mode
+  Details: Added Settings dropdown for Auto Save: Off, After Delay, On Focus
+           Change. After Delay saves 1s after the last edit. On Focus Change
+           saves when the window loses focus. Setting persists in localStorage.
+
+[2026-06-28 00:20] | FEATURE | Essential Explorer keyboard shortcuts
+  Details: Added Ctrl+N (new file in selected folder), Ctrl+W (close active tab),
+           Ctrl+Tab / Ctrl+Shift+Tab (cycle tabs), F2 (rename selected Explorer
+           item), Delete (delete selected Explorer item). Shortcuts ignore inputs,
+           textareas, and CodeMirror editors so they don't interrupt typing.
+
+[2026-06-28 00:25] | FEATURE | Explorer selection highlighting
+  Details: Clicking a file or folder in the Explorer now marks it as selected
+           (lastTreeSelection) and renders a subtle selected background. This
+           enables keyboard shortcuts and toolbar actions to target the correct
+           folder.
+
+[2026-06-28 00:30] | FEATURE | Project menu with recent folders
+  Details: Added a dropdown to the top project name with Open Folder... and a
+           Recent section. Recently opened folders are stored in localStorage
+           and can be reopened with one click. Added open-folder-path IPC in
+           main.js and preload.js to reload a specific folder without a dialog.
+
+[2026-06-28 00:35] | FEATURE | File watching for external disk changes
+  Details: main.js now watches the opened folder recursively with fs.watch.
+           File changes and deletions are sent to the renderer. The renderer
+           updates the in-memory file only if it is not dirty, preserving
+           unsaved edits. Changed files update the active editor content and
+           cursor position is restored.
+
+
