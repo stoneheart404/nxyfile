@@ -12,6 +12,7 @@
   "build": {
     "appId": "com.nyxfile.app",
     "productName": "Nyxfile",
+    "publish": null,
     "directories": {
       "output": "dist"
     },
@@ -23,8 +24,8 @@
       "target": ["dmg", "zip"],
       "icon": "icons/icon.png",
       "category": "public.app-category.utilities",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false
+      "hardenedRuntime": false,
+      "artifactName": "Nyxfile-${version}-${arch}.${ext}"
     },
     "files": [
       "main.js",
